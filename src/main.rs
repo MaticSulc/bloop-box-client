@@ -82,51 +82,50 @@ fn main() -> Result<()> {
         let (networker_tx, networker_rx) = mpsc::channel(8);
         let (networker_status_tx, networker_status_rx) = mpsc::channel(8);
 
-        Toplevel::new()
-            .start("Led", Led::new(led_rx).into_subsystem())
-            .start(
-                "ConfigManager",
-                ConfigManager::new(data_dir, config_rx).into_subsystem(),
+    Toplevel::new()
+        .start("Led", Led::new(etc_config.clone(), led_rx).into_subsystem())
+        .start(
+            "ConfigManager",
+            ConfigManager::new(data_dir, config_rx).into_subsystem(),
+        )
+        .start(
+            "AudioPlayer",
+            AudioPlayer::new(
+                share_dir.to_path_buf(),
+                cache_dir.clone(),
+                config_tx.clone(),
+                audio_player_rx,
             )
-            .start(
-                "AudioPlayer",
-                AudioPlayer::new(
-                    share_dir.to_path_buf(),
-                    cache_dir.clone(),
-                    config_tx.clone(),
-                    audio_player_rx,
-                )
-                .into_subsystem(),
+            .into_subsystem(),
+        )
+        .start(
+            "VolumeControl",
+            VolumeControl::new(etc_config.clone(), audio_player_tx.clone()).into_subsystem(),
+        )
+        .start(
+            "Networker",
+            Networker::new(
+                networker_rx,
+                networker_status_tx,
+                config_tx.clone(),
+                args.dangerous_disable_cert_verification,
+            ).into_subsystem(),
+        )
+        .start(
+            "Controller",
+            Controller::new(
+                etc_config,
+                cache_dir,
+                audio_player_tx,
+                led_tx,
+                config_tx,
+                networker_tx,
+                networker_status_rx,
             )
-            .start(
-                "VolumeControl",
-                VolumeControl::new(etc_config.clone(), audio_player_tx.clone()).into_subsystem(),
-            )
-            .start(
-                "Networker",
-                Networker::new(
-                    networker_rx,
-                    networker_status_tx,
-                    config_tx.clone(),
-                    args.dangerous_disable_cert_verification,
-                )
-                .into_subsystem(),
-            )
-            .start(
-                "Controller",
-                Controller::new(
-                    etc_config,
-                    cache_dir,
-                    audio_player_tx,
-                    led_tx,
-                    config_tx,
-                    networker_tx,
-                    networker_status_rx,
-                )
-                .into_subsystem(),
-            )
-            .catch_signals()
-            .handle_shutdown_requests(Duration::from_millis(1000))
-            .await
+            .into_subsystem(),
+        )
+        .catch_signals()
+        .handle_shutdown_requests(Duration::from_millis(1000))
+        .await
     })
 }

@@ -94,16 +94,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
-name = "aw2013"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "45215b0188ea206736e23a38469257ed95f8900db4cc8f98f64850ba6739bad8"
-dependencies = [
- "rppal 0.14.1",
- "thiserror",
-]
-
-[[package]]
 name = "base-x"
 version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -141,7 +131,6 @@ version = "3.2.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "aw2013",
  "clap",
  "embedded-hal",
  "env_logger",
@@ -156,7 +145,7 @@ dependencies = [
  "rand_distr",
  "regex",
  "rodio",
- "rppal 0.13.1",
+ "rppal",
  "rustls",
  "serde",
  "serde_json",
@@ -721,9 +710,9 @@ dependencies = [
 
 [[package]]
 name = "libm"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "348108ab3fba42ec82ff6e9564fc4ca0247bdccdc68dd8af9764bbc79c3c8ffb"
+checksum = "f7012b1bbb0719e1097c47611d3898568c546d597c2e74d66f6087edd5233ff4"
 
 [[package]]
 name = "linux-embedded-hal"
@@ -1265,15 +1254,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c88c9c6248de4d337747b619d8f671055ef48a87dc21b97998833f189a0bbd4f"
 dependencies = [
  "lazy_static",
- "libc",
-]
-
-[[package]]
-name = "rppal"
-version = "0.14.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "612e1a22e21f08a246657c6433fe52b773ae43d07c9ef88ccfc433cc8683caba"
-dependencies = [
  "libc",
 ]
 
